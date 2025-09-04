@@ -4,8 +4,6 @@
 
 1. `docker-compose.yml`
     ```yaml
-    version: "3.9"
-    
     services:
       mysql:
         image: mysql:8.0
