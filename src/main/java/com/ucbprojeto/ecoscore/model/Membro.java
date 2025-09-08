@@ -8,6 +8,7 @@ public class Membro {
     private String nome;
     private Date data_nascimento;
     private String papel_familia;
+    private String cpf_supervisor;
 
     public String getCpf() {
         return cpf;
@@ -47,5 +48,13 @@ public class Membro {
 
     public void setPapel_familia(String papel_familia) {
         this.papel_familia = papel_familia;
+    }
+
+    public String getCpf_supervisor() {
+        return cpf_supervisor;
+    }
+
+    public void setCpf_supervisor(String cpf_supervisor) {
+        this.cpf_supervisor = cpf_supervisor;
     }
 }
