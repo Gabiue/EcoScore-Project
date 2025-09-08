@@ -21,8 +21,10 @@ CREATE TABLE membro (
     nome VARCHAR(100) NOT NULL,
     data_nascimento DATE NOT NULL,
     papel_familia VARCHAR(50) NOT NULL,
+    cpf_supervisor CHAR(11), -- Auto-relacionamento para supervisão parental
     -- idade é derivada, não armazenamos
-    FOREIGN KEY (id_familia) REFERENCES familia(id_familia)
+    FOREIGN KEY (id_familia) REFERENCES familia(id_familia),
+    FOREIGN KEY (cpf_supervisor) REFERENCES membro(cpf)
 );
 
 -- ==============================
@@ -51,9 +53,10 @@ CREATE TABLE pratica_sustentavel (
     id_pratica INT AUTO_INCREMENT PRIMARY KEY,
     id_categoria INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
-    descricao varchar(256),
-    pontos_base INT NOT NULL,
+    descricao VARCHAR(512),
+    pontos_base INT NOT NULL CHECK (pontos_base > 0),
     dificuldade ENUM('FACIL', 'MEDIA', 'DIFICIL') NOT NULL,
+    frequencia_esperada VARCHAR(20),
     FOREIGN KEY (id_categoria) REFERENCES categoria_pratica(id_categoria)
 );
 
@@ -64,12 +67,13 @@ CREATE TABLE meta (
     id_meta INT AUTO_INCREMENT PRIMARY KEY,
     id_familia INT NOT NULL,
     titulo VARCHAR(100) NOT NULL,
-    descricao varchar(256),
+    descricao VARCHAR(512),
     pontos_objetivo INT NOT NULL,
     data_inicio DATE NOT NULL,
     data_fim DATE NOT NULL,
     status ENUM('ATIVA', 'CONCLUIDA', 'CANCELADA') NOT NULL,
-    FOREIGN KEY (id_familia) REFERENCES familia(id_familia)
+    FOREIGN KEY (id_familia) REFERENCES familia(id_familia),
+    CHECK (data_fim > data_inicio)
 );
 
 -- ==============================
@@ -116,6 +120,7 @@ CREATE TABLE registro_diario (
 CREATE TABLE membro_adulto (
     cpf CHAR(11) PRIMARY KEY,
     email VARCHAR(100) NOT NULL,
+    eh_responsavel BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (cpf) REFERENCES membro(cpf)
 );
 
@@ -128,8 +133,8 @@ CREATE TABLE membro_crianca (
 );
 
 -- ==============================
--- RESTRIÇÃO: Cada família tem exatamente UM responsável adulto
+-- ÍNDICES PARA PERFORMANCE
 -- ==============================
-ALTER TABLE familia
-ADD COLUMN cpf_responsavel CHAR(11) UNIQUE,
-ADD FOREIGN KEY (cpf_responsavel) REFERENCES membro_adulto(cpf);
+CREATE INDEX idx_registro_data ON registro_diario(data_registro);
+CREATE INDEX idx_membro_familia ON membro(id_familia);
+CREATE INDEX idx_telefone_membro ON telefone(cpf_membro);
