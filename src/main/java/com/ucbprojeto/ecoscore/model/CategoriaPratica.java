@@ -1,26 +1,9 @@
 package com.ucbprojeto.ecoscore.model;
 
 public class CategoriaPratica {
-    public enum EDificuldade {
-        FACIL,
-        MEDIA,
-        DIFICIL
-    }
-
-    private int id_pratica;
     private int id_categoria;
     private String nome;
-    private String descricao;
-    private int pontos_base;
-    private EDificuldade dificuldade;
-
-    public int getId_pratica() {
-        return id_pratica;
-    }
-
-    public void setId_pratica(int id_pratica) {
-        this.id_pratica = id_pratica;
-    }
+    private int fator_multiplicador;
 
     public int getId_categoria() {
         return id_categoria;
@@ -38,27 +21,11 @@ public class CategoriaPratica {
         this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public int getFator_multiplicador() {
+        return fator_multiplicador;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public int getPontos_base() {
-        return pontos_base;
-    }
-
-    public void setPontos_base(int pontos_base) {
-        this.pontos_base = pontos_base;
-    }
-
-    public EDificuldade getDificuldade() {
-        return dificuldade;
-    }
-
-    public void setDificuldade(EDificuldade dificuldade) {
-        this.dificuldade = dificuldade;
+    public void setFator_multiplicador(int fator_multiplicador) {
+        this.fator_multiplicador = fator_multiplicador;
     }
 }
