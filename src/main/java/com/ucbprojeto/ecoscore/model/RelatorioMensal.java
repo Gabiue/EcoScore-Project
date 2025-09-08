@@ -1,9 +1,11 @@
 package com.ucbprojeto.ecoscore.model;
 
+import java.sql.Date;
+
 public class RelatorioMensal {
     private int id_relatorio;
     private int id_familia;
-    private String mes_ano;
+    private Date mes_ano;
     private int total_pontos_familia;
     private int total_praticas_realizadas;
 
@@ -23,11 +25,11 @@ public class RelatorioMensal {
         this.id_familia = id_familia;
     }
 
-    public String getMes_ano() {
+    public Date getMes_ano() {
         return mes_ano;
     }
 
-    public void setMes_ano(String mes_ano) {
+    public void setMes_ano(Date mes_ano) {
         this.mes_ano = mes_ano;
     }
 

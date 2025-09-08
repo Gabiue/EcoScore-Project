@@ -90,7 +90,7 @@ CREATE TABLE conquista (
 CREATE TABLE relatorio_mensal (
     id_relatorio INT AUTO_INCREMENT PRIMARY KEY,
     id_familia INT NOT NULL,
-    mes_ano CHAR(7) NOT NULL, -- formato YYYY-MM
+    mes_ano DATE NOT NULL, -- formato MM-YY
     total_pontos_familia INT NOT NULL,
     total_praticas_realizadas INT NOT NULL,
     FOREIGN KEY (id_familia) REFERENCES familia(id_familia)
