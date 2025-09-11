@@ -3,7 +3,7 @@ package com.ucbprojeto.ecoscore.model;
 public class CategoriaPratica {
     private int id_categoria;
     private String nome;
-    private int fator_multiplicador;
+    private double fator_multiplicador;
 
     public int getId_categoria() {
         return id_categoria;
@@ -21,11 +21,11 @@ public class CategoriaPratica {
         this.nome = nome;
     }
 
-    public int getFator_multiplicador() {
+    public double getFator_multiplicador() {
         return fator_multiplicador;
     }
 
-    public void setFator_multiplicador(int fator_multiplicador) {
+    public void setFator_multiplicador(double fator_multiplicador) {
         this.fator_multiplicador = fator_multiplicador;
     }
 }
