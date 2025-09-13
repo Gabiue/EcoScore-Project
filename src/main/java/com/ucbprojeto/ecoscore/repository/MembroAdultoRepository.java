@@ -1,0 +1,47 @@
+package com.ucbprojeto.ecoscore.repository;
+
+import com.ucbprojeto.ecoscore.model.MembroAdulto;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class MembroAdultoRepository {
+    private final JdbcTemplate jdbcTemplate;
+
+    private final RowMapper<MembroAdulto> rowMapper = (rs, rowNum) -> {
+        MembroAdulto membroAdulto = new MembroAdulto();
+        membroAdulto.setCpf(rs.getString("cpf"));
+        membroAdulto.setEmail(rs.getString("email"));
+        membroAdulto.setEh_responsavel(rs.getBoolean("eh_responsavel"));
+        return membroAdulto;
+    };
+
+    public MembroAdultoRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+    public List<MembroAdulto> findAll() {
+        String sql = "SELECT * FROM membro_adulto";
+        return jdbcTemplate.query(sql, rowMapper);
+    }
+    public MembroAdulto findByCpf(String cpf) {
+        String sql = "SELECT * FROM membro_adulto WHERE cpf = ?";
+        return jdbcTemplate.queryForObject(sql, rowMapper, cpf );
+    }
+    public void save(MembroAdulto membroAdulto) {
+        String sql = "INSERT INTO membro_adulto (cpf, email, eh_responsavel) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, membroAdulto.getCpf(), membroAdulto.getEmail(), membroAdulto.isEh_responsavel());
+    }
+    public void update(MembroAdulto membroAdulto) {
+        String sql = "UPDATE membro_adulto SET email = ?, eh_responsavel = ? WHERE cpf = ?";
+        jdbcTemplate.update(sql, membroAdulto.getEmail(), membroAdulto.isEh_responsavel(), membroAdulto.getCpf());
+    }
+    public void deleteBycpf(String cpf) {
+        String sql = "DELETE FROM membro_adulto WHERE cpf = ?";
+        jdbcTemplate.update(sql, cpf);
+    }
+
+
+}
