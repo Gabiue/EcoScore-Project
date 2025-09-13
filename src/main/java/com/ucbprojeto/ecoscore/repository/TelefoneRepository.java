@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public class TelefoneRepository {
     private final JdbcTemplate jdbcTemplate;
+
     private final RowMapper<Telefone> rowMapper =(rs, rowNum) -> {
         Telefone telefone = new Telefone();
         telefone.setId_telefone(rs.getInt("id_telefone"));

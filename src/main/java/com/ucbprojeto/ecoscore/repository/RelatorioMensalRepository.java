@@ -35,7 +35,7 @@ public class RelatorioMensalRepository {
     }
     public List<RelatorioMensal> findByFamilia(int id_familia){
         String sql = "SELECT * FROM relatorio_mensal WHERE id_familia = ?";
-        return jdbcTemplate.query(sql, rowMapper);
+        return jdbcTemplate.query(sql, rowMapper, id_familia);
     }
 
     public void save(RelatorioMensal relatorioMensal){

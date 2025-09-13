@@ -11,10 +11,6 @@ import java.util.List;
 public class MembroCriancaRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public MembroCriancaRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
     private final RowMapper<MembroCrianca> rowMapper = (rs, rowNum) -> {
         MembroCrianca membroCrianca = new MembroCrianca();
         membroCrianca.setCpf(rs.getString("cpf"));
@@ -22,6 +18,9 @@ public class MembroCriancaRepository {
         membroCrianca.setBonus_escolar(rs.getInt("bonus_escolar"));
         return membroCrianca;
     };
+    public MembroCriancaRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public List<MembroCrianca> findAll() {
         String sql = "SELECT * FROM membro_crianca";
