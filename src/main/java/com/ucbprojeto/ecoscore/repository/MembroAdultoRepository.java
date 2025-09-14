@@ -30,6 +30,13 @@ public class MembroAdultoRepository {
         String sql = "SELECT * FROM membro_adulto WHERE cpf = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper, cpf );
     }
+    public boolean existeResponsavel(int id_familia) {
+        String sql = "SELECT COUNT(*) FROM membro_adulto ma " +
+                "JOIN membro m ON ma.cpf = m.cpf " +
+                "WHERE m.id_familia = ? AND ma.eh_responsavel = TRUE";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id_familia);
+        return count != null && count > 0;
+    }
     public void save(MembroAdulto membroAdulto) {
         String sql = "INSERT INTO membro_adulto (cpf, email, eh_responsavel) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, membroAdulto.getCpf(), membroAdulto.getEmail(), membroAdulto.isEh_responsavel());

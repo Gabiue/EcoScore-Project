@@ -36,7 +36,7 @@ public class PraticaSustentavelRepository {
         String sql = "SELECT * FROM pratica_sustentavel WHERE id_pratica = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
-    public List<PraticaSustentavel> findByCategoria(int id_categoria) {
+    public List<PraticaSustentavel> findByCategory(int id_categoria) {
         String sql = "SELECT * FROM pratica_sustentavel WHERE id_categoria = ?";
         return jdbcTemplate.query(sql, rowMapper, id_categoria);
     }

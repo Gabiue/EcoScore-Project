@@ -36,6 +36,10 @@ public class MembroRepository  {
         String sql = "SELECT * FROM membro WHERE cpf = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper, cpf);
     }
+    public List<Membro> findByFamily(int id_familia) {
+        String sql = "SELECT * FROM membro WHERE id_familia = ?";
+        return jdbcTemplate.query(sql, rowMapper, id_familia);
+    }
     public void save(Membro membro) {
         String sql = "INSERT INTO membro (cpf, id_familia, nome, data_nascimento, papel_familia, cpf_supervisor) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, membro.getCpf(), membro.getId_familia(), membro.getNome(), membro.getData_nascimento(), membro.getPapel_familia(), membro.getCpf_supervisor());
