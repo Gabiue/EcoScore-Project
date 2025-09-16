@@ -17,6 +17,7 @@ CREATE TABLE familia (
 -- ==============================
 CREATE TABLE membro (
     cpf CHAR(11) PRIMARY KEY,
+    senha CHAR(256) NOT NULL,
     id_familia INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
     data_nascimento DATE NOT NULL,
