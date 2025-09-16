@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Membro {
     private String cpf;
     private String senha;
-    private int id_familia;
+    private Integer id_familia;
     private String nome;
     private Date data_nascimento;
     private String papel_familia;
@@ -27,11 +27,11 @@ public class Membro {
         this.senha = senha;
     }
 
-    public int getId_familia() {
+    public Integer getId_familia() {
         return id_familia;
     }
 
-    public void setId_familia(int id_familia) {
+    public void setId_familia(Integer id_familia) {
         this.id_familia = id_familia;
     }
 

@@ -17,8 +17,8 @@ CREATE TABLE familia (
 -- ==============================
 CREATE TABLE membro (
     cpf CHAR(11) PRIMARY KEY,
-    senha CHAR(256) NOT NULL,
-    id_familia INT NOT NULL,
+    senha CHAR(255) NOT NULL,
+    id_familia INT NULL,
     nome VARCHAR(100) NOT NULL,
     data_nascimento DATE NOT NULL,
     papel_familia VARCHAR(50) NOT NULL,
@@ -120,7 +120,6 @@ CREATE TABLE registro_diario (
 -- ==============================
 CREATE TABLE membro_adulto (
     cpf CHAR(11) PRIMARY KEY,
-    email VARCHAR(100) NOT NULL,
     eh_responsavel BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (cpf) REFERENCES membro(cpf)
 );

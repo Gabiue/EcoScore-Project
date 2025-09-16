@@ -14,7 +14,6 @@ public class MembroAdultoRepository {
     private final RowMapper<MembroAdulto> rowMapper = (rs, rowNum) -> {
         MembroAdulto membroAdulto = new MembroAdulto();
         membroAdulto.setCpf(rs.getString("cpf"));
-        membroAdulto.setEmail(rs.getString("email"));
         membroAdulto.setEh_responsavel(rs.getBoolean("eh_responsavel"));
         return membroAdulto;
     };
@@ -38,12 +37,12 @@ public class MembroAdultoRepository {
         return count != null && count > 0;
     }
     public void save(MembroAdulto membroAdulto) {
-        String sql = "INSERT INTO membro_adulto (cpf, email, eh_responsavel) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, membroAdulto.getCpf(), membroAdulto.getEmail(), membroAdulto.isEh_responsavel());
+        String sql = "INSERT INTO membro_adulto (cpf, eh_responsavel) VALUES (?, ?)";
+        jdbcTemplate.update(sql, membroAdulto.getCpf(), membroAdulto.isEh_responsavel());
     }
     public void update(MembroAdulto membroAdulto) {
-        String sql = "UPDATE membro_adulto SET email = ?, eh_responsavel = ? WHERE cpf = ?";
-        jdbcTemplate.update(sql, membroAdulto.getEmail(), membroAdulto.isEh_responsavel(), membroAdulto.getCpf());
+        String sql = "UPDATE membro_adulto SET eh_responsavel = ? WHERE cpf = ?";
+        jdbcTemplate.update(sql, membroAdulto.isEh_responsavel(), membroAdulto.getCpf());
     }
     public void deleteBycpf(String cpf) {
         String sql = "DELETE FROM membro_adulto WHERE cpf = ?";
