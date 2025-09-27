@@ -1,17 +1,8 @@
 package com.ucbprojeto.ecoscore.model;
 
-public class MembroCrianca {
-    private String cpf;
+public class MembroCrianca extends Membro {
     private String cpf_responsavel;
     private int bonus_escolar;
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
 
     public String getCpf_responsavel() {
         return cpf_responsavel;
