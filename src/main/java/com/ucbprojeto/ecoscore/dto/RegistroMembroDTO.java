@@ -40,4 +40,5 @@ public class RegistroMembroDTO {
     public void setCpf_responsavel(String cpf_responsavel) { this.cpf_responsavel = cpf_responsavel; }
     public Integer getBonus_escolar() { return bonus_escolar; }
     public void setBonus_escolar(Integer bonus_escolar) { this.bonus_escolar = bonus_escolar; }
+
 }
