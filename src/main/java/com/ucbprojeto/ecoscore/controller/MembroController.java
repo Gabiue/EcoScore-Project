@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping("/membro")
+@RequestMapping("/api/membro")
 public class MembroController {
     @Autowired
     private MembroService membroService;
