@@ -12,12 +12,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categoria-pratica")
-public class CategoriaPraticaRepository {
+public class CategoriaPraticaController {
 
     @Autowired
     public CategoriaPraticaService categoriaPraticaService;
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoriaPraticaRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoriaPraticaController.class);
 
 
     @GetMapping
