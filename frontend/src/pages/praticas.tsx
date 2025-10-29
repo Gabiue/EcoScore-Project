@@ -25,6 +25,7 @@ export default function PraticasPage() {
     const [selectedFamily, setSelectedFamily] = useState<Familia | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
 
     const [form, setForm] = useState<Pratica>({
         id_categoria: 1,
@@ -91,28 +92,49 @@ export default function PraticasPage() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setError(null);
-        // The backend controller expects form-like binding (no @RequestBody),
-        // so send as application/x-www-form-urlencoded
-        const params = new URLSearchParams();
-        params.append("id_categoria", String(form.id_categoria));
-        params.append("nome", form.nome);
-        params.append("descricao", form.descricao);
-        params.append("pontos_base", String(form.pontos_base));
-        params.append("dificuldade", String(form.dificuldade));
-        params.append("frequencia_esperada", form.frequencia_esperada);
-
         try {
-            const res = await fetch("http://localhost:8080/api/pratica-sustentavel", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-                },
-                body: params.toString(),
-            });
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || `HTTP ${res.status}`);
+            if (editingId != null) {
+                // update via PUT (controller expects JSON @RequestBody)
+                const res = await fetch(`http://localhost:8080/api/pratica-sustentavel/${editingId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        id_categoria: form.id_categoria,
+                        nome: form.nome,
+                        descricao: form.descricao,
+                        pontos_base: form.pontos_base,
+                        dificuldade: form.dificuldade,
+                        frequencia_esperada: form.frequencia_esperada,
+                    }),
+                });
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || `HTTP ${res.status}`);
+                }
+                setEditingId(null);
+            } else {
+                // create via POST as form data (existing backend binding)
+                const params = new URLSearchParams();
+                params.append("id_categoria", String(form.id_categoria));
+                params.append("nome", form.nome);
+                params.append("descricao", form.descricao);
+                params.append("pontos_base", String(form.pontos_base));
+                params.append("dificuldade", String(form.dificuldade));
+                params.append("frequencia_esperada", form.frequencia_esperada);
+
+                const res = await fetch("http://localhost:8080/api/pratica-sustentavel", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                    },
+                    body: params.toString(),
+                });
+                if (!res.ok) {
+                    const text = await res.text();
+                    throw new Error(text || `HTTP ${res.status}`);
+                }
             }
+
             // refresh list
             await fetchData();
             // reset form
@@ -125,7 +147,37 @@ export default function PraticasPage() {
                 frequencia_esperada: "diaria",
             });
         } catch (e: any) {
-            setError("Erro ao criar prática: " + (e.message || e));
+            setError("Erro ao salvar prática: " + (e.message || e));
+        }
+    }
+
+    function handleEdit(p: Pratica) {
+        // populate form and enter edit mode
+        setForm({
+            id_categoria: p.id_categoria,
+            nome: p.nome,
+            descricao: p.descricao,
+            pontos_base: p.pontos_base,
+            dificuldade: p.dificuldade,
+            frequencia_esperada: p.frequencia_esperada,
+        });
+        setEditingId(p.id_pratica ?? null);
+    }
+
+    async function handleDelete(id?: number) {
+        if (!id) return;
+        const ok = window.confirm("Tem certeza que deseja deletar esta prática?");
+        if (!ok) return;
+        try {
+            const res = await fetch(`http://localhost:8080/api/pratica-sustentavel/${id}`, { method: "DELETE" });
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || `HTTP ${res.status}`);
+            }
+            // refresh
+            await fetchData();
+        } catch (e: any) {
+            setError("Erro ao deletar prática: " + (e.message || e));
         }
     }
 
@@ -230,18 +282,18 @@ export default function PraticasPage() {
                                     type="submit"
                                     className="bg-primary text-white px-3 py-1 rounded"
                                 >
-                                    Criar
+                                    {editingId != null ? "Salvar" : "Criar"}
                                 </button>
                                 <button
                                     type="button"
-                                    onClick={() => setForm({
+                                    onClick={() => { setForm({
                                         id_categoria: 1,
                                         nome: "",
                                         descricao: "",
                                         pontos_base: 10,
                                         dificuldade: "FACIL",
                                         frequencia_esperada: "diaria"
-                                    })}
+                                    }); setEditingId(null); }}
                                     className="px-3 py-1 rounded border"
                                 >
                                     Limpar
@@ -265,6 +317,7 @@ export default function PraticasPage() {
                                         <th>Categoria</th>
                                         <th>Pontos</th>
                                         <th>Dificuldade</th>
+                                        <th className="text-right">Ações</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -275,6 +328,32 @@ export default function PraticasPage() {
                                             <td>{p.id_categoria}</td>
                                             <td>{p.pontos_base}</td>
                                             <td>{p.dificuldade}</td>
+                                            <td className="py-1 text-right">
+                                                <div className="inline-flex items-center gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleEdit(p)}
+                                                        title="Editar"
+                                                        className="p-1 rounded hover:bg-gray-100"
+                                                    >
+                                                        {/* pencil icon */}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5h6M4 7v13h13v-6M17 3l4 4-7 7H10v-4l7-7z" />
+                                                        </svg>
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleDelete(p.id_pratica)}
+                                                        title="Apagar"
+                                                        className="p-1 rounded hover:bg-gray-100 text-red-600"
+                                                    >
+                                                        {/* trash icon */}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M10 3h4a1 1 0 011 1v1H9V4a1 1 0 011-1z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                     </tbody>
